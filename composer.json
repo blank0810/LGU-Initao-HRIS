@@ -12,7 +12,9 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "phpoffice/phpspreadsheet": "^2.1"
+        "phpoffice/phpspreadsheet": "^2.1",
+        "psr/http-message": "^1.0",
+        "spatie/laravel-export": "1.0.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
