@@ -2,13 +2,19 @@
 @section('title', 'Payroll')
 @section('pagespecificstyle')
 <style>
-    .modal-dialog-scrollable .modal-content {
-      overflow-x: hidden;
+    .modal-dialog {
+      max-width: 50%; /* Optional: Control max width */
+      height: auto; /* Let the modal expand naturally */
     }
 
-    .modal-dialog-scrollable .modal-body {
-      overflow-x: auto;
-      white-space: nowrap;
+    .modal-content {
+      height: auto; /* Allow the content to grow */
+      max-height: 90vh; /* Prevent the modal from overflowing the viewport */
+      overflow-y: auto; /* Add scrollbar only if content overflows */
+    }
+
+    .card {
+      margin-bottom: 0; /* Avoid spacing issues */
     }
   </style>
 @stop
@@ -131,7 +137,7 @@
       </div>
     </section>
 
-    <div class="modal fade" id="job-order-payslip" tabindex="1" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal fade" id="job-order-payslip" tabindex="1" role="dialog" aria-hidden="true" data-bs-backdrop="static">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -140,20 +146,18 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="card">
-            <div class="card-header text-center">
-              <div class="card-title text-muted">
-                <strong>Employees' List</strong>
+          <div class="modal-body">
+            <div class="card mb-0">
+              <div class="card-header">
+                <h3 class="card-title">Employee List</h3>
+                <div class="card-tools">
+                  <button type="button" id="print-job-order" class="btn btn-success btn-sm">
+                    <i class="fas fa-print mr-2"></i> Print Payslip
+                  </button>
+                </div>
               </div>
-              <div class="card-tools">
-                <button type="button" id="print-job-order" class="btn btn-success btn-sm">
-                  <i class="fas fa-print mr-2"></i>
-                  Print Payslip
-                </button>
-              </div>
-            </div>
-            <div class="card-body">
-                <table id="job-order-payslip-table" class="table table-bordered table-hover">
+              <div class="card-body">
+                <table id="job-order-payslip-table" class="table table-bordered table-hover table-head-fixed text-nowrap">
                   <thead>
                     <tr>
                       <th>Employee</th>
@@ -164,10 +168,11 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <!-- Rows are dynamically being inputted -->
+                    <!-- Rows are dynamically added here -->
                   </tbody>
                 </table>
               </div>
+            </div>
           </div>
         </div>
       </div>
@@ -183,24 +188,36 @@
             </button>
           </div>
           <div class="modal-body">
-            <h5 class="text-center mb-4"><strong>Employees' List</strong></h5>
-            <table id="regular-payslip-table" class="table table-bordered table-hover">
-              <thead>
-                <tr>
-                  <th rowspan="2">Employee</th>
-                  <th rowspan="2">Occupation</th>
-                  <th rowspan="2">Rate</th>
-                  <th id="deduction-header" colspan="4" class="text-center">Deductions</th>
-                  <th rowspan="2">Total</th>
-                </tr>
-                <tr id="deduction-sub-headers">
-                  <!-- Rows for sub-headers will be dynamically populated here -->  
-                </tr>
-              </thead>
-              <tbody>
-                <!-- Table rows will be dynamically populated here -->
-              </tbody>
-            </table>
+            <div class="card mb-0">
+              <div class="card-header">
+                <h3 class="card-title">Employee List</h3>
+                <div class="card-tools">
+                  <button type="button" id="print-job-order" class="btn btn-success btn-sm">
+                    <i class="fas fa-print mr-2"></i> Print Payslip
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <table id="regular-payslip-table" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Employee</th>
+                      <th>Occupation</th>
+                      <th>Rate</th>
+                      <th>Deductions 
+                        <span class="text-muted small d-block font-italic">
+                          (Includes all applicable taxes and contributions)
+                        </span>
+                      </th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Table rows will be dynamically populated here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -264,6 +281,14 @@
 <script>
   $(document).ready(function()
   {
+    const payslipModal = document.getElementById('job-order-payslip');
+
+    // Adjust height after modal is shown (in case dynamic rows are added)
+    payslipModal.addEventListener('shown.bs.modal', function () {
+      const modalDialog = payslipModal.querySelector('.modal-dialog');
+      modalDialog.style.height = 'auto'; // Recalculate height
+    });
+    
     $('#generate-all-btn').click(function()
     {
       //$('#job-order-payslip').modal('show');
