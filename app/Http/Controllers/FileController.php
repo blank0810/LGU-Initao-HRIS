@@ -45,9 +45,15 @@ class FileController extends Controller
 
             // Loop through all shapes (including textboxes) in the worksheet
             foreach ($worksheet->Shapes as $shape) {
-                if ($shape->Type == msoTextBox) {
+                if ($shape->Type == msoTextBox) 
+                {
                     // Check if the textbox has a specific name or other identifiable property
-                    if ($shape->Name === 'employeeName') {
+                    if ($shape->Name === 'applicationNumber')
+                    {
+                        $shape->TextFrame->Characters()->Text = $applicationNumber;
+                    }
+                    elseif ($shape->Name === 'employeeName') 
+                    {
                         // Update the text content of the textbox
                         $shape->TextFrame->Characters()->Text = $employeeName;
                     }
@@ -71,8 +77,7 @@ class FileController extends Controller
             // Return success response with the file URL
             return response()->json([
                 'success' => true,
-                'file_path' => $fileUrl,
-                'message' => 'File is not created. Contact System Administrator'
+                'file_path' => $fileUrl
             ]);
 
         } catch (\Exception $e) {
@@ -102,5 +107,11 @@ class FileController extends Controller
     function printJobOrderPayslip()
     {
         return view('hrViews.pages.printablePages.jobOrderPayslip');
+    }
+
+    function printRegularPayslip()
+    {
+        return view('hrViews.pages.printablePages.regularPayslip');
+        //return view('hrViews.pages.printablePages.samplePrint');
     }
 }

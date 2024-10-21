@@ -192,7 +192,7 @@
               <div class="card-header">
                 <h3 class="card-title">Employee List</h3>
                 <div class="card-tools">
-                  <button type="button" id="print-job-order" class="btn btn-success btn-sm">
+                  <button type="button" id="print-regular" class="btn btn-success btn-sm">
                     <i class="fas fa-print mr-2"></i> Print Payslip
                   </button>
                 </div>
@@ -321,6 +321,29 @@
     {
       $('#authorization-modal').modal('show');
     });
+
+    $('#print-regular').click(function()
+    {
+      // Show loading animation
+        Swal.fire
+        ({
+          title: 'Generating Payslip...',
+          html: 'Please wait while we generate Payslip List.',
+          allowOutsideClick: false,
+          didOpen: () => 
+          {
+            Swal.showLoading();
+            // Add a slight delay to ensure the loading animation is shown
+            setTimeout(() => 
+            {
+              var printUrl = '/print-regular-payslip';
+              window.open(printUrl, '_blank');
+              Swal.close();
+            }, 3000); // Adjust the delay as needed
+          }
+      });
+    });
+
   });
 </script>
 @stop

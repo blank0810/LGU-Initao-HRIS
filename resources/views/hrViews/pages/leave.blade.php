@@ -320,6 +320,26 @@
       </div>
     </section>
     <!-- /.content -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="memberModalLabel">Member Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="memberDetails">Loading...</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
   <!-- /.content-wrapper -->
 @endsection
@@ -394,11 +414,21 @@
                 Swal.close();
 
                 // Check if the request was successful and file path is provided
-                if (response.success && response.file_path) {
-                    // Open the PDF file in a new tab
-                    window.open(response.file_path, '_blank');
-                    console.log(response.file_path);
-                } else {
+                if (response.success && response.file_path) 
+                {
+                  // Open the PDF file in a new tab
+                  console.log(response.file_path);
+                  const pdfWindow = window.open(response.file_path, '_blank');
+
+                  // Trigger the print dialog when the PDF is loaded
+                  pdfWindow.onload = function () 
+                  {
+                    pdfWindow.print();
+                  }
+                    
+                } 
+                else 
+                {
                     // Handle error or no file path provided
                     Swal.fire({
                       icon: 'error',

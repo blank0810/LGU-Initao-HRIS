@@ -25,3 +25,5 @@ Route::get('/print-travel', [FileController::class, 'printTravel']);
 Route::get('/print-slip', [FileController::class, 'printSlip']);
 
 Route::get('/print-job-order-payslip', [FileController::class, 'printJobOrderPayslip']);
+
+Route::get('/print-regular-payslip', [FileController::class, 'printRegularPayslip']);
